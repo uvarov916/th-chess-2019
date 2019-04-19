@@ -33,7 +33,7 @@ def get_difference(frame1, frame2, reddots) :
         array.append(tempArr)
     return array
 
-frame1 = cv2.imread("image1.jpg")
-frame2 = cv2.imread("image2.jpg")
+# frame1 = cv2.imread("image1.jpg")
+# frame2 = cv2.imread("image2.jpg")
 
-print(get_difference(frame1,frame2,reddots.CoordRedDots(frame1)))
+# print(get_difference(frame1,frame2,reddots.CoordRedDots(frame1)))
