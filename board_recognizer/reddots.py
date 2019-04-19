@@ -18,8 +18,8 @@ def GetCenter(dots):
     return[int(summx/lenght), int(summy/lenght)] 
 
 def CoordRedDots(image):
-    imageWidth = image.shape[1]
-    imageHeight = image.shape[0]
+    imageWidth = image.shape[0]
+    imageHeight = image.shape[1]
 
     xPos, yPos = 0, 0
 
@@ -30,9 +30,9 @@ def CoordRedDots(image):
 
     while xPos < imageWidth:
         while yPos < imageHeight:
-            if IsRed(image[yPos, xPos]):
+            if IsRed(image[xPos, yPos]):
                 redDots.append([xPos,yPos])
-               # image[xPos,yPos] = [0,0,255]
+                # image[xPos,yPos] = [0,0,255]
             yPos = yPos + 1
         yPos = 0
         xPos = xPos + 1
@@ -56,7 +56,9 @@ def CoordRedDots(image):
     result.append(GetCenter(top_right))
     result.append(GetCenter(bottom_left))
     result.append(GetCenter(bottom_right))
+    print(result)
+    # cv2.imwrite("result.jpg", image)
     return result
 
-# field_edges = CoordRedDots(cv2.imread("img1.png"))
+# field_edges = CoordRedDots(cv2.imread("image1.jpg"))
 # print(field_edges)
