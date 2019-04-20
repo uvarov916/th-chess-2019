@@ -4,7 +4,7 @@ import './BoardController.css';
 import {Chat} from "../Chat/Chat";
 import {TimeController} from "../TimeController/TimeController";
 import {init, getBoard} from '../services/BoardService.js';
-
+import {help, helpStart, helpEnd} from "../services/HelpService";
 
 export class BoardController extends React.Component {
     constructor(props) {
@@ -39,6 +39,8 @@ export class BoardController extends React.Component {
                 index: 0,
                 history: [data.board]
             });
+            window.speakWords('И вот, игра началась!');
+            console.log('new board');
         });
     }
 
@@ -48,6 +50,10 @@ export class BoardController extends React.Component {
             this.setState({
                 index: this.state.history.length - 1,
             });
+            console.log('new board');
+            helpStart(data.board).then((helpData)=>{
+                console.log(helpData);
+            })
         });
     }
 
@@ -57,6 +63,7 @@ export class BoardController extends React.Component {
             this.setState({
                 index: this.state.history.length - 1,
             });
+            console.log('new board');
         });
     }
 

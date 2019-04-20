@@ -12,7 +12,7 @@ export function helpEnd(_board) {
 
 function helpRequest(address, _board, _question) {
     let result = new Promise((resolve, reject) => {
-        fetch('http://helpermock.herokuapp.com/' + address, {
+        fetch('http://10.54.32.207:8000/' + address, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
