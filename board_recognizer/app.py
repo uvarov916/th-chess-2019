@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from flask_cors import CORS
 import jinja2
 import os
 import json
@@ -9,6 +10,7 @@ import cv2
 import chess
 
 app = Flask(__name__)
+CORS(app)
 step = 0
 
 threshold_value = 950
@@ -117,5 +119,5 @@ def mocinit():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
-    app.run(host='127.0.0.1', port=port,debug=True)
-#     app.run(host='0.0.0.0', port=port,debug=True)
+    # app.run(host='127.0.0.1', port=port,debug=True)
+    app.run(host='0.0.0.0', port=port,debug=True)
