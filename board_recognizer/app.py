@@ -8,8 +8,19 @@ import cv2
 app = Flask(__name__)
 step = 0
 
+threshold_value = 1500
+
 PREVIOUS = []
 REDDOTS = []
+
+def get_notation_difference(changes):
+    change_position_array = []
+    changes.reverse()
+    for x in range(8):
+        for y in range(8):
+            if (changes[x][y] > threshold_value):
+                change_position_array.append([x,y])
+    return change_position_array
 
 @app.route('/get_board')
 def get_board():
@@ -18,6 +29,8 @@ def get_board():
     frame = cap.read()[1]
     cap.release()
     result = difference.get_difference(PREVIOUS,frame,REDDOTS)
+    changes_positions = get_notation_difference(result)
+    print(changes_positions)
     PREVIOUS = frame
     return json.dumps(result)
 
