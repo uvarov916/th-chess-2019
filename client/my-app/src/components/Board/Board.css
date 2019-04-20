@@ -1,0 +1,31 @@
+.voiceBlock {
+    position: absolute;
+    background-color: white;
+    left: 78%;
+    top: 0;
+    width: 180px;
+    height: 100%;
+    border-radius: 7px;
+    z-index: 100;
+}
+
+.board_cell_darkolivegreen{
+    background-color: #769656;
+}
+
+.board_cell_lime{
+    background-color: #eeeed2;
+}
+
+.figure{
+    height: 70px;
+    width: 70px;
+}
+.board {
+    border: 6px solid #525544;
+    border-radius: 8px;
+    display: grid;
+    width: 560px;
+    grid-template-columns: repeat(8, 1fr);
+}
+

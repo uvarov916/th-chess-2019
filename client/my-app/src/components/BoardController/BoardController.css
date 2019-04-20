@@ -1,0 +1,41 @@
+.BoardController-button {
+    padding: 2px;
+    border-radius: 4px;
+    border-style: solid;
+    color: black;
+    width: 80px;
+    cursor: pointer;
+    margin : 4px;
+    outline: none;
+}
+
+.margin-board{
+    margin: 15px;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.BorderController-all{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 100%;
+    background-color: #2f2e2a;
+}
+
+.BoardController-time {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.distance-boardController-elements{
+    margin: 0 20px;
+}
+
+.flex-board-center {
+    flex: 1;
+}

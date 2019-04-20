@@ -1,0 +1,11 @@
+.height-all{
+     height: 100%;
+ }
+
+.body-margin {
+    margin: 0;
+}
+
+html {
+    font-family: "Open Sans";
+}
