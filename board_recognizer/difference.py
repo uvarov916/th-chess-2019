@@ -5,9 +5,9 @@ import reddots
 
 def get_difference(frame1, frame2, reddots) :
     res = cv2.absdiff(frame1, frame2)
-    res = cv2.blur(res, (15, 10))
+    res = cv2.blur(res, (25, 25)) #15 10
     res = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
-    res = cv2.threshold(res, 10,255,cv2.THRESH_BINARY)[1]
+    res = cv2.threshold(res, 23,255,cv2.THRESH_BINARY)[1] #10
     maxx = reddots[1][0]
     maxy = reddots[2][1]
     lengthx = reddots[1][0] - reddots[0][0]

@@ -74,58 +74,61 @@ class Board:
 
 	#def translate(coordinate)
 	def apply_changes(self, changes):
-		if self.ActiveColor == 'b' :
-			self.FullMove = str(int(self.FullMove) + 1)
-		if len(changes) == 2 :
-			# Ход на пустую клетку
-			if self.board[changes[0][0]][changes[0][1]] == None or self.board[changes[1][0]][changes[1][1]] == None :
-				temp = self.board[changes[0][0]][changes[0][1]]
-				self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
-				self.board[changes[1][0]][changes[1][1]] = temp
-				self.HalfMove = str(int(self.HalfMove) + 1)
-				if self.board[changes[0][0]][changes[0][1]] == 'P' or self.board[changes[0][0]][changes[0][1]] == 'p' or self.board[changes[1][0]][changes[1][1]] == 'P' or self.board[changes[1][0]][changes[1][1]] == 'p' :
-					self.HalfMove = '0'
-					#peshka na prohode
-					if abs(changes[0][0] - changes[1][0]) == 2 : 
-						polosa = 8 - (changes[0][0] + changes[1][0])//2
-						print('eto polosa ' , polosa)
-						self.EnPassant = str(chr(ord('a') + changes[0][1]))+ str(polosa)
-
-
-			# Съедаем
-			else :
-				isFirstBlack = self.board[changes[0][0]][changes[0][1]].islower()
-				self.HalfMove = '0'
-
-				# съели первого
-				if isFirstBlack and self.ActiveColor == 'w' or not isFirstBlack and self.ActiveColor == 'b' :
+		# if len(changes) <= 4 and len(changes) > 0:
+		if len(changes) == 4 or len(changes) == 2:
+			if self.ActiveColor == 'b' :
+				self.FullMove = str(int(self.FullMove) + 1)
+			self.EnPassant = '-'
+			if len(changes) == 2 :
+				# Ход на пустую клетку
+				if self.board[changes[0][0]][changes[0][1]] == None or self.board[changes[1][0]][changes[1][1]] == None :
+					temp = self.board[changes[0][0]][changes[0][1]]
 					self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
-					self.board[changes[1][0]][changes[1][1]] = None
-				# съели второго
-				else:
-					self.board[changes[1][0]][changes[1][1]] = self.board[changes[0][0]][changes[0][1]]
-					self.board[changes[0][0]][changes[0][1]] = None
+					self.board[changes[1][0]][changes[1][1]] = temp
+					self.HalfMove = str(int(self.HalfMove) + 1)
+					if self.board[changes[0][0]][changes[0][1]] == 'P' or self.board[changes[0][0]][changes[0][1]] == 'p' or self.board[changes[1][0]][changes[1][1]] == 'P' or self.board[changes[1][0]][changes[1][1]] == 'p' :
+						self.HalfMove = '0'
+						#peshka na prohode
+						if abs(changes[0][0] - changes[1][0]) == 2 : 
+							polosa = 8 - (changes[0][0] + changes[1][0])//2
+							print('eto polosa ' , polosa)
+							self.EnPassant = str(chr(ord('a') + changes[0][1]))+ str(polosa)
 
-		if len(changes) == 4:	
-			
-			self.HalfMove = '0'
-			if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'kq'	
-			if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQ' : self.CastlingAvailability = '-'
 
-			if self.ActiveColor == 'b' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'KQ'
-			if self.ActiveColor == 'b' and self.CastlingAvailability == 'kq' : self.CastlingAvailability = '-'
+				# Съедаем
+				else :
+					isFirstBlack = self.board[changes[0][0]][changes[0][1]].islower()
+					self.HalfMove = '0'
 
-			tmp = self.board[changes[0][0]][changes[0][1]]
-			self.board[changes[0][0]][changes[0][1]] = self.board[changes[2][0]][changes[2][1]]
-			self.board[changes[2][0]][changes[2][1]] = tmp
-			tmp = self.board[changes[1][0]][changes[1][1]]
-			self.board[changes[1][0]][changes[1][1]] = self.board[changes[3][0]][changes[3][1]]
-			self.board[changes[3][0]][changes[3][1]] = tmp
+					# съели первого
+					if isFirstBlack and self.ActiveColor == 'w' or not isFirstBlack and self.ActiveColor == 'b' :
+						self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
+						self.board[changes[1][0]][changes[1][1]] = None
+					# съели второго
+					else:
+						self.board[changes[1][0]][changes[1][1]] = self.board[changes[0][0]][changes[0][1]]
+						self.board[changes[0][0]][changes[0][1]] = None
 
-		if self.ActiveColor == 'w' :
-			self.ActiveColor = 'b'
-		else :
-			self.ActiveColor = 'w'
+			if len(changes) == 4:	
+				self.HalfMove = str(int(self.HalfMove) + 1)
+				#self.HalfMove = '0'
+				if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'kq'	
+				if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQ' : self.CastlingAvailability = '-'
+
+				if self.ActiveColor == 'b' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'KQ'
+				if self.ActiveColor == 'b' and self.CastlingAvailability == 'kq' : self.CastlingAvailability = '-'
+
+				tmp = self.board[changes[0][0]][changes[0][1]]
+				self.board[changes[0][0]][changes[0][1]] = self.board[changes[2][0]][changes[2][1]]
+				self.board[changes[2][0]][changes[2][1]] = tmp
+				tmp = self.board[changes[1][0]][changes[1][1]]
+				self.board[changes[1][0]][changes[1][1]] = self.board[changes[3][0]][changes[3][1]]
+				self.board[changes[3][0]][changes[3][1]] = tmp
+
+			if self.ActiveColor == 'w' :
+				self.ActiveColor = 'b'
+			else :
+				self.ActiveColor = 'w'
 			
 				 
 def swap (a, b) :

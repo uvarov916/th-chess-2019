@@ -6,10 +6,12 @@ import difference
 from fen import Board
 import cv2
 
+import chess
+
 app = Flask(__name__)
 step = 0
 
-threshold_value = 1500
+threshold_value = 950
 
 PREVIOUS = []
 PREVIOUS_FEN = ""
@@ -45,12 +47,14 @@ def get_board():
     board = Board(PREVIOUS_FEN)
     board.apply_changes(changes_positions)
     new_fen = board.get_fen()
-    
-    #print(board.apply_changes(changes_positions))
     PREVIOUS_FEN = new_fen
     PREVIOUS = frame
     print(result)
+    print(PREVIOUS_FEN)
+    print(chess.Board(PREVIOUS_FEN))
     return json.dumps({"board": PREVIOUS_FEN})
+    #return json.dumps({"board": print(board)})
+
 
 
 @app.route('/init')
