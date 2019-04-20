@@ -1,4 +1,3 @@
-import re
 import json
 class Board:
 	def __init__(self, fen):
