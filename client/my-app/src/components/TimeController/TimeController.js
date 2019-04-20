@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './TimeController.css';
 import {TimeView} from './TimeView'
+import {getBoard} from "../services/BoardService";
 
 export class TimeController extends Component {
     constructor(props) {
@@ -41,13 +42,21 @@ export class TimeController extends Component {
                     });
                 }
             }, 1000);
+
+            let self = this;
         document.addEventListener("keydown", (event)=> {
             if (event.keyCode === 32) {
-                if (this.state.turn !== null) {
-                    this.setState({turn: !this.state.turn});
+                if (self.state.turn !== null) {
+                    if (self.state.turn)  {
+                        self.props.whiteMoveEndCallback();
+                    } else {
+                        self.props.whiteMoveStartCallback();
+                    }
+                    self.setState({turn: !self.state.turn});
+
                 } else {
-                    this.setState({turn: true});
-                    this.props.initCallback();
+                    self.setState({turn: true});
+                    self.props.initCallback();
                 }
             }
         }, false);
