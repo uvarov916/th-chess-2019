@@ -51,7 +51,7 @@ export class BoardController extends React.Component {
         return (
             <div className='BorderController-all height-all'>
                 <div className='distance-boardController-elements BoardController-time'>
-                    <TimeController/>
+                    <TimeController turn={this.state.props.turn}/>
                     </div>
                 <div className='flex-board-center'>
                     <div className='justify-center margin-board'>
@@ -69,5 +69,12 @@ export class BoardController extends React.Component {
                 </div>
             </div>
         );
+    }
+    componentDidMount(){
+        document.addEventListener("keydown", (event)=> {
+            if (event.keyCode == 32) {
+                this.setState({turn : !this.props.turn});
+            }   
+        }, false);
     }
 }
