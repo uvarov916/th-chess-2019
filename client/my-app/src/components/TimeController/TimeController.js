@@ -27,6 +27,11 @@ export class TimeController extends Component {
         );
     } 
 
+    static getDerivedStateFromProps(props) {
+        this.setState({turn : props.turn})
+        console.log(this.state.turn)
+    }
+
     componentDidMount() {
         setInterval(()=> {
             if (this.state.turn) {
@@ -39,11 +44,5 @@ export class TimeController extends Component {
                 });
             }
         }, 1000)
-
-        document.addEventListener("keydown", (event)=> {
-            if (event.keyCode == 32) {
-                this.setState({turn : !this.state.turn});
-            }   
-        }, false);
     } 
 }
