@@ -1,0 +1,46 @@
+.Chat-label{
+    border-color: #ffffff;
+    border-radius: 6px;
+    border-style: solid;
+    padding: 5px;
+    margin: 5px;
+    width: 200px;
+    background-color: #ffffff;
+}
+
+.Chat-div{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.Message-div {
+    border-radius: 10px;
+}
+
+.Message-content-author2{
+    background-color: #f0f0f0;
+    margin: 10px;
+}
+.Message-content-author1{
+    background-color: #0066ff;
+    color: white;
+    margin: 10px;
+}
+.Message-style-author1{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.Message-style-author2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.Message-style-all {
+    display: flex;
+    border-radius: 6px;
+    padding: 5px;
+    margin: 3px;
+}
