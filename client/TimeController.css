@@ -1,0 +1,53 @@
+.time-controller {
+    background-color: #282c34;
+    height: 100%;
+    width: 25%  ;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .timer-back {
+    background-color: #282c34;
+    flex: 1;
+    display: flex;
+    text-align: center;
+    justify-content: space-between; 
+    flex-direction: column; 
+  }
+  
+  .app-timer {
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .timer-white {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  .timer-black {
+    background-color: #000000;
+    color: #ffffff;
+  }
+  
+  .timer-active {  
+    box-sizing: content-box;
+    border: solid 4px coral;
+  }
+  
+  .timer-pad {
+    flex: 1;
+    display: flex;
+    padding: 10px;
+  }
+  
+  html, body, #root{
+    height: 100%;
+  }
+  
+  
