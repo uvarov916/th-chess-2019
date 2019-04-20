@@ -1,6 +1,6 @@
 import re
-
-class condition:
+import json
+class Board:
 	def __init__(self, fen):
 		self.board = [['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], 
 			['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], 
@@ -34,7 +34,7 @@ class condition:
 				states += str(count)
 			if i < 7:
 				states += '/'	
-		#states += ' ' + self.ActiveColor + ' ' + self.CastlingAvailability + ' ' + self.EnPassant + ' ' + int(self.HalfMove) + ' ' + int(self.FullMove)
+		states += ' ' + self.ActiveColor + ' ' + self.CastlingAvailability + ' ' + self.EnPassant + ' ' + str(self.HalfMove) + ' ' + str(self.FullMove)
 		return states
 
 	def init_board(self, fen):
@@ -43,7 +43,7 @@ class condition:
 		states = state[0].split('/')
 		for row in range(8):
 			column = list(states[row])
-			j = -1
+			j = 0
 			for grid in column:
 				if (grid >='A' and grid <= 'Z') or (grid >='a' and grid <= 'z'):
 					self.board[row][j] = grid
@@ -70,5 +70,41 @@ class condition:
 		print(step1.HalfMove)
 		print(step1.FullMove)
 
-step1 = condition('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b K-kq e3 1 1')
-step1.print_board()
+
+	def apply_changes(self, changes):
+		if len(changes) == 2 :
+			# Ход на пустую клетку
+			if self.board[changes[0][0]][changes[0][1]] == None or self.board[changes[1][0]][changes[1][1]] == None :
+				temp = self.board[changes[0][0]][changes[0][1]]
+				self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
+				self.board[changes[1][0]][changes[1][1]] = temp
+			# Съедаем
+			else :
+				isFirstBlack = self.board[changes[0][0]][changes[0][1]].islower()
+
+				# съели первого
+				if isFirstBlack and self.ActiveColor == 'w' or not isFirstBlack and self.ActiveColor == 'b' :
+					self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
+					self.board[changes[1][0]][changes[1][1]] = None
+				# съели второго
+				else:
+					self.board[changes[1][0]][changes[1][1]] = self.board[changes[0][0]][changes[0][1]]
+					self.board[changes[0][0]][changes[0][1]] = None
+
+
+		#if len(changes) == 3 :
+
+
+				#if self.board[changes[b][0]][changes[b][1]] == 'p' or self.board[changes[b][0]][changes[b][1]] == 'P' :
+				#	if [change[a][0], change[b][1]] == translate(self.EnPassant = '-') or [change[b][0], change[a][1]] == translate(self.EnPassant = '-') :
+				#		print('prohod')
+
+		if self.ActiveColor == 'w' :
+			self.ActiveColor = 'b'
+		else :
+			self.ActiveColor = 'w'
+			
+				 
+
+# step1 = condition('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b K-kq e3 1 1')
+# step1.print_board()
