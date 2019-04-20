@@ -1,3 +1,6 @@
+const HEROKU_URL = 'https://boardtsr.herokuapp.com/';
+const LOCAL_URL = 'http://10.54.32.205:8000/'
+
 export function init() {
     return boardRequest('init');
 }
@@ -8,7 +11,7 @@ export function getBoard() {
 
 function boardRequest(address) {
     let result = new Promise((resolve, reject) => {
-        fetch('https://boardtsr.herokuapp.com/' + address, { 
+        fetch(HEROKU_URL + address, { 
             method : "GET", 
             headers : {
                 'Content-Type': 'application/json'

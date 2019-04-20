@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './TimeController.css';
 import {TimeView} from './TimeView'
-import {getBoard} from "../services/BoardService";
 
 export class TimeController extends Component {
     constructor(props) {

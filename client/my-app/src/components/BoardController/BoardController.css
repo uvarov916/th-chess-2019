@@ -39,3 +39,12 @@
 .flex-board-center {
     flex: 1;
 }
+
+.BorderController-chat {
+    padding: 8px;
+}
+
+.selected-cell {
+    box-shadow: 0px 0px 0px 4px #ea7568 inset;
+    background-color: #f9b9b2 !important;
+}

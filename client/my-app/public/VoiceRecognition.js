@@ -31,7 +31,6 @@ function startListen(dataCallback) {
         },
         dataCallback: function(text, uttr) {
             if(uttr) {
-                console.log(text);
                 if(dataCallback) {
                     dataCallback.call(window, text);
                 }
