@@ -13,7 +13,7 @@ export class Chat extends React.Component {
     }
 
     render() {
-        console.log(this.state.messages);
+       // console.log(this.state.messages);
         return (
             <div className='Chat-div height-all'>
                     <div className='Chat-label'>
