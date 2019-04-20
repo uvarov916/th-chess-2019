@@ -17,6 +17,7 @@ class Board:
 		self.FullMove = 0
 		self.init_board(fen)
 
+	
 	def get_fen(self):
 		states = ''
 		count = 0
@@ -71,16 +72,30 @@ class Board:
 		print(step1.FullMove)
 
 
+	#def translate(coordinate)
 	def apply_changes(self, changes):
+		if self.ActiveColor == 'b' :
+			self.FullMove = str(int(self.FullMove) + 1)
 		if len(changes) == 2 :
 			# Ход на пустую клетку
 			if self.board[changes[0][0]][changes[0][1]] == None or self.board[changes[1][0]][changes[1][1]] == None :
 				temp = self.board[changes[0][0]][changes[0][1]]
 				self.board[changes[0][0]][changes[0][1]] = self.board[changes[1][0]][changes[1][1]]
 				self.board[changes[1][0]][changes[1][1]] = temp
+				self.HalfMove = str(int(self.HalfMove) + 1)
+				if self.board[changes[0][0]][changes[0][1]] == 'P' or self.board[changes[0][0]][changes[0][1]] == 'p' or self.board[changes[1][0]][changes[1][1]] == 'P' or self.board[changes[1][0]][changes[1][1]] == 'p' :
+					self.HalfMove = '0'
+					#peshka na prohode
+					if abs(changes[0][0] - changes[1][0]) == 2 : 
+						polosa = 8 - (changes[0][0] + changes[1][0])//2
+						print('eto polosa ' , polosa)
+						self.EnPassant = str(chr(ord('a') + changes[0][1]))+ str(polosa)
+
+
 			# Съедаем
 			else :
 				isFirstBlack = self.board[changes[0][0]][changes[0][1]].islower()
+				self.HalfMove = '0'
 
 				# съели первого
 				if isFirstBlack and self.ActiveColor == 'w' or not isFirstBlack and self.ActiveColor == 'b' :
@@ -91,13 +106,21 @@ class Board:
 					self.board[changes[1][0]][changes[1][1]] = self.board[changes[0][0]][changes[0][1]]
 					self.board[changes[0][0]][changes[0][1]] = None
 
+		if len(changes) == 4:	
+			
+			self.HalfMove = '0'
+			if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'kq'	
+			if self.ActiveColor == 'w' and self.CastlingAvailability == 'KQ' : self.CastlingAvailability = '-'
 
-		#if len(changes) == 3 :
+			if self.ActiveColor == 'b' and self.CastlingAvailability == 'KQkq' : self.CastlingAvailability = 'KQ'
+			if self.ActiveColor == 'b' and self.CastlingAvailability == 'kq' : self.CastlingAvailability = '-'
 
-
-				#if self.board[changes[b][0]][changes[b][1]] == 'p' or self.board[changes[b][0]][changes[b][1]] == 'P' :
-				#	if [change[a][0], change[b][1]] == translate(self.EnPassant = '-') or [change[b][0], change[a][1]] == translate(self.EnPassant = '-') :
-				#		print('prohod')
+			tmp = self.board[changes[0][0]][changes[0][1]]
+			self.board[changes[0][0]][changes[0][1]] = self.board[changes[2][0]][changes[2][1]]
+			self.board[changes[2][0]][changes[2][1]] = tmp
+			tmp = self.board[changes[1][0]][changes[1][1]]
+			self.board[changes[1][0]][changes[1][1]] = self.board[changes[3][0]][changes[3][1]]
+			self.board[changes[3][0]][changes[3][1]] = tmp
 
 		if self.ActiveColor == 'w' :
 			self.ActiveColor = 'b'
@@ -105,6 +128,10 @@ class Board:
 			self.ActiveColor = 'w'
 			
 				 
+def swap (a, b) :
+	tmp = a
+	a = b
+	b = tmp
 
 # step1 = condition('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b K-kq e3 1 1')
 # step1.print_board()
