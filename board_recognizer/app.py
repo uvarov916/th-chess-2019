@@ -13,7 +13,7 @@ app = Flask(__name__)
 CORS(app)
 step = 0
 
-threshold_value = 950
+threshold_value = 1500 #950
 
 PREVIOUS = []
 PREVIOUS_FEN = ""
@@ -45,7 +45,7 @@ demo_states = [
 ]
 
 def get_frame():
-    camera = cv2.VideoCapture(1)
+    camera = cv2.VideoCapture(0)
     frame = camera.read()[1]
     camera.release()
     return frame
@@ -59,7 +59,41 @@ def get_notation_difference(changes):
         for y in range(8):
             if (changes[x][y] > threshold_value):
                 change_position_array.append([x,y])
-    return change_position_array
+
+    # Find 2 maxes
+    temp = changes.copy()
+    max_change_positions = []
+    max_val = -1
+    max_idx = [-1,-1]
+    for x in range(8):
+        for y in range(8):
+            if (temp[x][y] > max_val):
+                max_val = temp[x][y]
+                max_idx = [x,y]
+
+    max_change_positions.append(max_idx)
+    temp[max_idx[0]][max_idx[1]] = -1
+    max_val = -1
+    max_idx = [-1,-1]
+    for x in range(8):
+        for y in range(8):
+            if (temp[x][y] > max_val):
+                max_val = temp[x][y]
+                max_idx = [x,y]
+
+    max_change_positions.append(max_idx)
+    
+    if (len(change_position_array) == 4):
+        line_num = change_position_array[0][0]
+        if not (line_num == 0 or line_num == 7):
+            return max_change_positions
+        else:
+            for change in change_position_array:
+                if change[0] != line_num:
+                    return max_change_positions
+            return change_position_array
+    else:
+        return max_change_positions
 
 @app.route('/get_board')
 def get_board():
@@ -77,6 +111,8 @@ def get_board():
         changes_positions = get_notation_difference(result)
         # print(changes_positions)
         board = Board(PREVIOUS_FEN)
+        print("difference", result)
+        print("changes", changes_positions)
         board.apply_changes(changes_positions)
         new_fen = board.get_fen()
         PREVIOUS_FEN = new_fen
@@ -101,7 +137,7 @@ def init():
     global DEMO_STATUS
     DEMO_STATUS = False
     frame = get_frame()
-    cv2.imwrite('img11.png', frame)
+    # cv2.imwrite('img11.png', frame)
     PREVIOUS = frame
     REDDOTS = difference.reddots.CoordRedDots(frame)
     PREVIOUS_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
@@ -116,6 +152,19 @@ def mocinit():
     DEMO_STATUS = True
     PREVIOUS_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     return json.dumps({"board": PREVIOUS_FEN})
+
+@app.route('/swap', methods=['POST'])
+def swap():
+    global PREVIOUS_FEN
+    json_req = request.get_json()
+    swap_cells = json_req["cells"]
+    board = Board(PREVIOUS_FEN)
+    if (len(swap_cells) == 2):
+        board.swap_cells(swap_cells[0], swap_cells[1])
+    new_fen = board.get_fen()
+    PREVIOUS_FEN = new_fen
+    return json.dumps({"board": PREVIOUS_FEN})
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))

@@ -7,12 +7,14 @@ export class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: '',
+      board: ''
     };
     this.editedCell = [];
     this.step = '';
     this.getFigures=this.getFigures.bind(this);
   }
+
+
 
   getFigures() {
     this.editedCell=[];
@@ -54,27 +56,28 @@ export class Board extends React.Component {
     this.getFigures();
     for (const[index,value] of this.editedCell.entries()) {
       if (index % 8 === 0) {cell = !cell;}
-      let possibleMovesClass = possibleMoves[index] ? 'selected-cell' : '';
+      let possibleMovesClass = possibleMoves[index] ? ' possible-move-cell ' : '';
+      let selectedClass = this.props.selectedCells[index] ? ' selected-cell ' : '';
       if (value!== '') {
           if (cell) {
             cell = false;
-            items.push(<div key = {index} className={value + ' figure board_cell_darkolivegreen ' + possibleMovesClass}>
+            items.push(<div key = {index} onClick={(e) => {this.props.cellClickHandler(index)}} className={value + ' figure board_cell_darkolivegreen ' + possibleMovesClass + selectedClass}>
               <img src={figures[value]} className='figure'/>
             </div>);
           } else {
             cell = true;
-            items.push(<div key = {index} className={value + ' figure board_cell_lime ' + possibleMovesClass}>
+            items.push(<div key = {index} onClick={(e) => {this.props.cellClickHandler(index)}} className={value + ' figure board_cell_lime ' + possibleMovesClass + selectedClass}>
               <img src={figures[value]} className='figure'/>
             </div>);
           }
       } else {
         if (cell) {
           cell = false;
-          items.push(<div key={index} className={'figure board_cell_darkolivegreen' + possibleMovesClass}>
+          items.push(<div key={index} onClick={(e) => {this.props.cellClickHandler(index)}} className={'figure board_cell_darkolivegreen ' + possibleMovesClass + selectedClass}>
           </div>);
         } else {
           cell = true;
-          items.push(<div key={index} className={'figure board_cell_lime' + possibleMovesClass}>
+          items.push(<div key={index} onClick={(e) => {this.props.cellClickHandler(index)}} className={'figure board_cell_lime ' + possibleMovesClass + selectedClass}>
           </div>);
         }
       }

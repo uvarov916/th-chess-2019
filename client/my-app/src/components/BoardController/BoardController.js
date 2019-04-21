@@ -3,7 +3,7 @@ import {Board} from "../Board/Board";
 import './BoardController.css';
 import {Chat} from "../Chat/Chat";
 import {TimeController} from "../TimeController/TimeController";
-import {init, getBoard} from '../Services/BoardService.js';
+import {init, getSwapped, getBoard} from '../Services/BoardService.js';
 import {help, helpStart, helpEnd} from "../Services/HelpService";
 
 export class BoardController extends React.Component {
@@ -16,20 +16,44 @@ export class BoardController extends React.Component {
             messages:[],
             index : 0,
             listening: false,
-            possibleMoves: []
+            possibleMoves: [],
+            selectedCells: new Array(64),
+            showingSlides: false,
+            activeSlide: 1
         };
         this.answering = false;
         this.speaking = false;
-        this.plusHistory=this.plusHistory.bind(this);
-        this.minusHistory=this.minusHistory.bind(this);
-        this.initGame=this.initGame.bind(this);
-        this.whiteMoveEnd=this.whiteMoveEnd.bind(this);
-        this.whiteMoveStart=this.whiteMoveStart.bind(this);
+        this.plusHistory = this.plusHistory.bind(this);
+        this.minusHistory = this.minusHistory.bind(this);
+        this.initGame = this.initGame.bind(this);
+        this.whiteMoveEnd = this.whiteMoveEnd.bind(this);
+        this.whiteMoveStart = this.whiteMoveStart.bind(this);
         this.analyzeText = this.analyzeText.bind(this);
         this.startListen = this.startListen.bind(this);
         this.stopListen = this.stopListen.bind(this);
         this.addMessageToChat = this.addMessageToChat.bind(this);
         this.speakWords = this.speakWords.bind(this);
+        this.swapCells = this.swapCells.bind(this);
+        this.selectCell = this.selectCell.bind(this);
+    }
+
+    selectCell(cellId) {
+        let temp = [...this.state.selectedCells];
+        temp[cellId] = !temp[cellId];
+        
+        this.setState({
+            selectedCells: temp
+        });
+    }
+
+    swapCells() {
+        getSwapped(this.state.selectedCells).then((data) => {
+            this.state.history[this.state.history.length - 1] = data.board;
+            this.setState({
+                index: this.state.history.length - 1,
+                selectedCells: new Array(64)
+            });
+        });
     }
 
     addMessageToChat(text, user) {
@@ -57,6 +81,10 @@ export class BoardController extends React.Component {
         window.startListen(this.analyzeText);
         this.setState({ listening: true });
         console.log('Listening...')
+
+        setTimeout(() => {
+            this.addMessageToChat("Вы что-то хотели?", false)
+        }, 2500);
     }
 
     stopListen() {
@@ -76,7 +104,7 @@ export class BoardController extends React.Component {
                 this.addMessageToChat(answerData.answer, false);
                 this.answering = false;
                 this.speakWords(answerData.answer);
-                this.setState({'possibleMoves': answerData.possibleMoves || []});
+                this.setState({'possibleMoves': answerData.possible_moves || []});
             });
         }
     }
@@ -149,6 +177,11 @@ export class BoardController extends React.Component {
     render(){
         return (
             <div className='BorderController-all height-all'>
+                <div className={"image-overlay" + (this.state.showingSlides ? "" : " hide")}>
+                    <div className="image-flex">
+                        <img className="image-image" src={"/slide_" + this.state.activeSlide + ".jpg"}/>
+                    </div>
+                </div>
                 <div className='distance-boardController-elements BoardController-time'>
                     <TimeController
                         initCallback={this.initGame}
@@ -161,11 +194,14 @@ export class BoardController extends React.Component {
                         <Board
                             fen = {this.state.history[this.state.index]}
                             possibleMoves={this.state.possibleMoves}
+                            selectedCells={this.state.selectedCells}
+                            cellClickHandler={this.selectCell}
                         />
                     </div>
                     <div className='justify-center margin-board'>
-                        <button className='BoardController-button' onClick={this.minusHistory}> Previous </button>
-                        <button className='BoardController-button' onClick={this.plusHistory}> Next </button>
+                        <button className='BoardController-button' onClick={this.minusHistory}> PREVIOUS </button>
+                        <button className='BoardController-button' onClick={this.swapCells}> SWAP </button>
+                        <button className='BoardController-button' onClick={this.plusHistory}> NEXT </button>
                     </div>
                 </div>
                 <div className='height-all distance-boardController-elements BorderController-chat'>
@@ -187,6 +223,32 @@ export class BoardController extends React.Component {
                     this.stopListen();
                 }
                 
+            }
+
+            if (event.keyCode === 49) {
+                if (!this.state.showingSlides) {
+                    this.setState({
+                        showingSlides: true,
+                        activeSlide: 1
+                    })
+                } else {
+                    this.setState({
+                        showingSlides: false
+                    })
+                }
+            }
+
+            if (event.keyCode === 50) {
+                if (!this.state.showingSlides) {
+                    this.setState({
+                        showingSlides: true,
+                        activeSlide: 2
+                    })
+                } else {
+                    this.setState({
+                        showingSlides: false
+                    })
+                }
             }
         });
     }

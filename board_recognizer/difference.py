@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import msvcrt as m
 import reddots
 
 def get_difference(frame1, frame2, reddots) :

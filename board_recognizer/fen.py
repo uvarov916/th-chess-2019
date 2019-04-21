@@ -16,6 +16,10 @@ class Board:
 		self.FullMove = 0
 		self.init_board(fen)
 
+	def swap_cells(self, cell1, cell2):
+		temp = self.board[cell1[0]][cell1[1]]
+		self.board[cell1[0]][cell1[1]] = self.board[cell2[0]][cell2[1]]
+		self.board[cell2[0]][cell2[1]] = temp
 	
 	def get_fen(self):
 		states = ''
